@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-label="Jardin moderno">
+  <rect width="900" height="900" fill="#dfe8d1"/>
+  <circle cx="705" cy="170" r="210" fill="#b7cc88"/>
+  <circle cx="240" cy="250" r="180" fill="#8dad56"/>
+  <path fill="#243d1f" d="M0 590c97-60 196-83 296-69 119 17 201 93 319 110 95 14 190-12 285-78v347H0z"/>
+  <path fill="#6f8b3d" d="M0 690c124-62 239-80 344-55 102 25 183 90 292 96 83 5 171-23 264-85v254H0z"/>
+  <path fill="#f6f8f3" d="M114 525c58-105 124-157 198-157s139 52 196 157H114z" opacity=".86"/>
+  <path fill="#ffffff" d="M503 374c79 0 142 64 142 142H361c0-78 63-142 142-142z" opacity=".72"/>
+  <g fill="#172014" opacity=".85">
+    <rect x="220" y="453" width="24" height="150" rx="12"/>
+    <rect x="584" y="453" width="24" height="150" rx="12"/>
+    <path d="M232 436c-44-31-50-73-18-126 52 25 72 67 58 126z"/>
+    <path d="M596 436c44-31 50-73 18-126-52 25-72 67-58 126z"/>
+  </g>
+</svg>
