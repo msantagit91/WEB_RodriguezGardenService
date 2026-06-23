@@ -1,50 +1,96 @@
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import { brand, heroTrustItems } from "@/data/publicPage";
 
+type HeroMotion = {
+  x: number;
+  y: number;
+};
+
 export function HeroSection() {
+  const [motion, setMotion] = useState<HeroMotion>({ x: 0, y: 0 });
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLElement>) => {
+    if (event.pointerType === "touch") {
+      return;
+    }
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    setMotion({
+      x: (event.clientX - rect.left) / rect.width - 0.5,
+      y: (event.clientY - rect.top) / rect.height - 0.5,
+    });
+  };
+
+  const resetMotion = () => setMotion({ x: 0, y: 0 });
+
   return (
     <section
       id="inicio"
-      className="relative isolate overflow-hidden bg-[#F8FAF7] px-5 pb-20 pt-36 sm:px-8 sm:pt-40 lg:px-10 lg:pb-28"
+      className="relative isolate flex min-h-[92svh] overflow-hidden bg-[#031008] px-5 pb-16 pt-32 text-white sm:px-8 sm:pt-36 lg:min-h-screen lg:px-10 lg:pb-24"
+      onPointerLeave={resetMotion}
+      onPointerMove={handlePointerMove}
     >
-      <div className="absolute inset-0 -z-20 bg-[linear-gradient(115deg,#F8FAF7_0%,#FFFFFF_42%,#F7FDF2_100%)]" />
-      <div className="absolute -left-32 top-8 -z-10 size-96 rounded-full bg-[#63B32E]/24 blur-3xl" />
-      <div className="absolute -right-24 top-20 -z-10 size-[28rem] rounded-full bg-[#F39C12]/22 blur-3xl" />
-      <div className="absolute bottom-0 left-1/2 -z-10 h-72 w-[54rem] -translate-x-1/2 rounded-full bg-[#0B6B2E]/12 blur-3xl" />
+      <div className="absolute inset-0 -z-40 bg-[radial-gradient(circle_at_50%_0%,rgba(247,178,72,0.2),transparent_30%),radial-gradient(circle_at_16%_24%,rgba(42,142,76,0.36),transparent_34%),radial-gradient(circle_at_84%_28%,rgba(238,151,59,0.13),transparent_31%),linear-gradient(145deg,#020806_0%,#062012_48%,#020604_100%)]" />
+      <div className="absolute inset-0 -z-30 bg-[linear-gradient(180deg,rgba(255,255,255,0.06)_0%,transparent_28%,rgba(0,0,0,0.34)_100%)]" />
+      <div className="absolute inset-x-0 top-0 -z-20 h-72 bg-[radial-gradient(ellipse_at_top,rgba(255,223,153,0.18),transparent_68%)]" />
+      <div className="absolute -left-24 top-20 -z-20 size-[22rem] rounded-full bg-[#1E8F47]/24 blur-3xl sm:size-[32rem]" />
+      <div className="absolute -right-28 top-28 -z-20 size-[20rem] rounded-full bg-[#D4AF37]/15 blur-3xl sm:size-[30rem]" />
+      <div className="absolute bottom-[-12rem] left-1/2 -z-20 h-[24rem] w-[42rem] -translate-x-1/2 rounded-full bg-[#0B6B2E]/34 blur-3xl" />
+      <div className="absolute left-[8%] top-[34%] -z-10 h-40 w-60 rounded-[44%_56%_60%_40%] bg-white/[0.04] blur-2xl animate-[premiumBlob_12s_ease-in-out_infinite]" />
+      <div className="absolute right-[8%] top-[22%] -z-10 h-44 w-56 rounded-[58%_42%_48%_52%] bg-[#F39C12]/[0.08] blur-2xl animate-[premiumBlob_14s_ease-in-out_1.5s_infinite]" />
+      <div className="absolute left-1/2 top-24 -z-10 h-px w-[72vw] -translate-x-1/2 bg-gradient-to-r from-transparent via-white/24 to-transparent" />
+      <div className="absolute left-[12%] top-[18%] -z-10 size-1 rounded-full bg-[#F8DDA0]/70 shadow-[0_0_28px_8px_rgba(248,221,160,0.18)] animate-[lightParticle_8s_ease-in-out_infinite]" />
+      <div className="absolute right-[22%] top-[58%] -z-10 size-1.5 rounded-full bg-[#D4AF37]/60 shadow-[0_0_30px_8px_rgba(212,175,55,0.16)] animate-[lightParticle_10s_ease-in-out_1s_infinite]" />
 
-      <div className="mx-auto grid w-full max-w-7xl items-center gap-12 lg:min-h-[calc(100vh-7rem)] lg:grid-cols-[0.92fr_1.08fr]">
-        <div className="max-w-3xl animate-[fadeUp_700ms_ease-out_both]">
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/62 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#0B6B2E] shadow-[0_12px_34px_rgba(31,41,55,0.08)] backdrop-blur-xl">
-            <span className="size-2 rounded-full bg-[#F39C12] shadow-[0_0_18px_rgba(243,156,18,0.7)]" />
+      <div
+        className="pointer-events-none absolute left-1/2 top-[52%] -z-10 h-64 w-[115vw] -translate-x-1/2 -translate-y-1/2 rounded-[50%] border border-white/[0.055] bg-white/[0.025] shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_0_120px_rgba(30,143,71,0.12)] backdrop-blur-[2px] sm:h-80 sm:w-[86vw]"
+        style={{
+          transform: `translate3d(calc(-50% + ${motion.x * 10}px), calc(-50% + ${
+            motion.y * 8
+          }px), 0)`,
+        }}
+      />
+
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-center">
+        <div className="relative z-10 mx-auto max-w-5xl text-center">
+          <p className="animate-[fadeUp_760ms_cubic-bezier(0.16,1,0.3,1)_both] inline-flex items-center gap-2 rounded-full border border-white/[0.14] bg-white/[0.07] px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/78 shadow-[0_18px_56px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-2xl sm:text-xs">
+            <span className="size-2 rounded-full bg-[#D4AF37] shadow-[0_0_18px_rgba(212,175,55,0.6)]" />
             Jardinería profesional
           </p>
-          <h1 className="mt-6 font-heading text-4xl font-semibold leading-[1.04] tracking-normal text-[#1F2937] sm:text-5xl lg:text-6xl xl:text-[4.55rem]">
+
+          <h1 className="animate-[fadeUp_900ms_cubic-bezier(0.16,1,0.3,1)_120ms_both] mx-auto mt-7 max-w-[22rem] font-heading text-[2.35rem] font-semibold leading-[1.04] tracking-normal text-white drop-shadow-[0_24px_80px_rgba(0,0,0,0.28)] min-[390px]:max-w-[23.5rem] min-[390px]:text-[2.55rem] sm:max-w-4xl sm:text-6xl lg:text-7xl xl:text-[5.75rem]">
             Transformamos espacios verdes en lugares{" "}
-            <span className="bg-gradient-to-r from-[#0B6B2E] via-[#63B32E] to-[#F39C12] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-white via-[#F8DDA0] to-[#7BD167] bg-clip-text text-transparent drop-shadow-[0_18px_55px_rgba(212,175,55,0.16)]">
               extraordinarios.
             </span>
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-8 text-[#1F2937]/72 sm:text-lg">
+
+          <p className="animate-[fadeUp_900ms_cubic-bezier(0.16,1,0.3,1)_240ms_both] mx-auto mt-6 max-w-2xl text-base leading-8 text-white/68 sm:text-lg">
             Mantenimiento profesional, poda, césped y cercas vivas para hogares
             y empresas.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <div className="animate-[fadeUp_900ms_cubic-bezier(0.16,1,0.3,1)_340ms_both] mx-auto mt-8 grid w-full max-w-sm gap-3 sm:flex sm:max-w-none sm:justify-center">
             <Link
-              className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-[#0B6B2E] px-6 text-sm font-semibold text-white shadow-[0_20px_42px_rgba(11,107,46,0.24)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_26px_55px_rgba(243,156,18,0.3)] sm:h-13 sm:px-7"
+              className="group relative inline-flex h-13 items-center justify-center overflow-hidden rounded-full bg-white px-6 text-sm font-semibold text-[#062012] shadow-[0_24px_65px_rgba(0,0,0,0.28),0_0_40px_rgba(212,175,55,0.12)] transition duration-500 hover:-translate-y-1 hover:shadow-[0_28px_78px_rgba(0,0,0,0.34),0_0_55px_rgba(212,175,55,0.18)] sm:px-7"
               href={brand.quoteHref}
             >
-              <span className="absolute inset-0 bg-gradient-to-r from-[#0B6B2E] via-[#11883D] to-[#F39C12] opacity-0 transition duration-500 group-hover:opacity-100" />
-              <span className="absolute -left-8 top-0 h-full w-8 skew-x-[-18deg] bg-white/24 opacity-0 blur-sm transition duration-700 group-hover:left-[112%] group-hover:opacity-100" />
+              <span className="absolute inset-0 bg-gradient-to-r from-white via-[#F8DDA0] to-[#A7E164] opacity-0 transition duration-700 group-hover:opacity-100" />
+              <span className="absolute -left-8 top-0 h-full w-8 skew-x-[-18deg] bg-white/70 opacity-0 blur-sm transition duration-700 group-hover:left-[112%] group-hover:opacity-100" />
               <span className="relative">Solicitar Cotización</span>
             </Link>
+
             <Link
-              className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full border border-[#25D366]/30 bg-white/76 px-5 text-sm font-semibold text-[#0B6B2E] shadow-[0_16px_36px_rgba(37,211,102,0.12)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[#25D366]/60 hover:bg-white hover:shadow-[0_22px_48px_rgba(37,211,102,0.22)] sm:h-13 sm:px-7"
+              className="group relative inline-flex h-13 items-center justify-center overflow-hidden rounded-full border border-white/[0.16] bg-white/[0.075] px-6 text-sm font-semibold text-white shadow-[0_22px_58px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-2xl transition duration-500 hover:-translate-y-1 hover:border-[#25D366]/40 hover:bg-white/[0.12] sm:px-7"
               href={brand.whatsappHref}
+              target="_blank"
+              rel="noreferrer"
             >
-              <span className="absolute inset-0 bg-gradient-to-r from-[#25D366]/0 via-[#25D366]/10 to-[#F39C12]/10 opacity-0 transition duration-500 group-hover:opacity-100" />
-              <span className="mr-2 grid size-6 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_0_18px_rgba(37,211,102,0.48)] transition duration-300 group-hover:scale-105">
+              <span className="absolute inset-0 bg-gradient-to-r from-[#25D366]/0 via-[#25D366]/12 to-[#D4AF37]/12 opacity-0 transition duration-700 group-hover:opacity-100" />
+              <span className="mr-2 grid size-6 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_0_18px_rgba(37,211,102,0.42)]">
                 <svg
                   aria-hidden="true"
                   className="size-3.5"
@@ -58,85 +104,29 @@ export function HeroSection() {
             </Link>
           </div>
 
-          <div className="mt-9 grid gap-3 sm:grid-cols-3">
+          <div className="animate-[fadeUp_900ms_cubic-bezier(0.16,1,0.3,1)_450ms_both] mx-auto mt-10 grid max-w-3xl gap-2.5 min-[430px]:grid-cols-3 sm:gap-3">
             {heroTrustItems.map((item) => (
               <div
-                className="group rounded-3xl border border-white/70 bg-white/58 px-4 py-4 shadow-[0_14px_40px_rgba(31,41,55,0.08)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_50px_rgba(31,41,55,0.12)]"
+                className="rounded-[1.35rem] border border-white/[0.11] bg-white/[0.055] px-4 py-3 text-left shadow-[0_18px_50px_rgba(0,0,0,0.16),inset_0_1px_0_rgba(255,255,255,0.09)] backdrop-blur-2xl"
                 key={item.label}
               >
                 <span
-                  className={`mb-3 block size-2.5 rounded-full ${
+                  className={`mb-2 block size-2 rounded-full ${
                     item.tone === "orange"
-                      ? "bg-[#F39C12] shadow-[0_0_20px_rgba(243,156,18,0.55)]"
+                      ? "bg-[#D4AF37] shadow-[0_0_18px_rgba(212,175,55,0.52)]"
                       : item.tone === "lime"
-                        ? "bg-[#63B32E] shadow-[0_0_20px_rgba(99,179,46,0.45)]"
-                        : "bg-[#0B6B2E] shadow-[0_0_20px_rgba(11,107,46,0.45)]"
+                        ? "bg-[#A7E164] shadow-[0_0_18px_rgba(167,225,100,0.35)]"
+                        : "bg-[#1E8F47] shadow-[0_0_18px_rgba(30,143,71,0.45)]"
                   }`}
                 />
-                <span className="block text-sm font-semibold text-[#1F2937]">
+                <span className="block text-sm font-semibold text-white/88">
                   {item.label}
                 </span>
-                <span className="mt-1 block text-xs font-medium text-[#1F2937]/56">
+                <span className="mt-1 block text-xs font-medium text-white/48">
                   {item.detail}
                 </span>
               </div>
             ))}
-          </div>
-        </div>
-
-        <div className="relative animate-[fadeUp_900ms_ease-out_120ms_both] pb-8 sm:pb-12">
-          <div className="absolute -left-4 top-10 z-10 hidden animate-[floatSoft_6s_ease-in-out_infinite] rounded-[1.75rem] border border-white/70 bg-white/76 p-4 shadow-[0_24px_70px_rgba(31,41,55,0.18)] backdrop-blur-2xl sm:block">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#F39C12]">
-              Confianza
-            </p>
-            <p className="mt-1 font-heading text-xl font-semibold text-[#1F2937]">
-              Servicio Profesional
-            </p>
-          </div>
-
-          <div className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 animate-[floatSoft_7s_ease-in-out_800ms_infinite] rounded-[1.5rem] border border-white/70 bg-[#0B6B2E]/88 px-5 py-4 text-white shadow-[0_24px_70px_rgba(11,107,46,0.22)] backdrop-blur-2xl sm:block">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/70">
-              Atención
-            </p>
-            <p className="mt-1 text-sm font-semibold">Personalizada</p>
-          </div>
-
-          <div className="absolute bottom-4 left-8 z-10 hidden animate-[floatSoft_8s_ease-in-out_300ms_infinite] rounded-[1.5rem] border border-white/70 bg-white/80 px-5 py-4 shadow-[0_24px_70px_rgba(243,156,18,0.18)] backdrop-blur-2xl md:block">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#F39C12]">
-              Puntualidad
-            </p>
-            <p className="mt-1 text-sm font-semibold text-[#1F2937]">
-              Coordinación clara
-            </p>
-          </div>
-
-          <div className="relative min-h-[390px] overflow-hidden rounded-[2.25rem] border border-white/70 bg-[#0B6B2E]/10 shadow-[0_36px_110px_rgba(31,41,55,0.18)] sm:min-h-[520px] lg:min-h-[640px]">
-            <Image
-              src="/gallery/hero-garden-service.png"
-              alt="Jardín profesional con zonas verdes cuidadas por Rodriguez Garden Service"
-              fill
-              sizes="(max-width: 1024px) 100vw, 52vw"
-              className="scale-[1.02] object-cover transition duration-700 hover:scale-[1.05]"
-              fetchPriority="high"
-            />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_74%_14%,rgba(243,156,18,0.28),transparent_24%),linear-gradient(180deg,rgba(11,107,46,0.02),rgba(11,107,46,0.34))]" />
-            <div className="absolute inset-x-8 top-6 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
-          </div>
-
-          <div className="absolute -bottom-2 left-5 right-5 z-20 rounded-[1.75rem] border border-white/70 bg-white/86 p-4 shadow-[0_20px_60px_rgba(31,41,55,0.16)] backdrop-blur-2xl sm:-bottom-1 sm:left-auto sm:right-8 sm:w-72">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#0B6B2E]">
-                  Respuesta clara
-                </p>
-                <p className="mt-1 text-sm font-semibold text-[#1F2937]">
-                  Cotización para hogares y empresas.
-                </p>
-              </div>
-              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[#F39C12] to-[#0B6B2E] text-sm font-bold text-white shadow-[0_12px_30px_rgba(243,156,18,0.35)]">
-                +
-              </span>
-            </div>
           </div>
         </div>
       </div>

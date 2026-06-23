@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { type MouseEvent, useEffect, useRef, useState } from "react";
 import { brand, navigationItems } from "@/data/publicPage";
 
 export function SiteHeader() {
@@ -10,6 +10,7 @@ export function SiteHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeNavIndex, setActiveNavIndex] = useState(0);
   const [hoverNavIndex, setHoverNavIndex] = useState<number | null>(null);
+  const headerBarRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 12);
@@ -20,6 +21,40 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleAnchorNavigation = (
+    event: MouseEvent<HTMLAnchorElement>,
+    href: string,
+    index?: number,
+  ) => {
+    if (!href.startsWith("#")) {
+      return;
+    }
+
+    const target = document.querySelector<HTMLElement>(href);
+
+    if (!target) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const headerBottom =
+      headerBarRef.current?.getBoundingClientRect().bottom ?? 92;
+    const subtleGap = window.matchMedia("(max-width: 640px)").matches ? 10 : 14;
+    const targetTop =
+      href === "#inicio"
+        ? 0
+        : target.getBoundingClientRect().top + window.scrollY - headerBottom - subtleGap;
+
+    window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+    window.history.pushState(null, "", href);
+    setIsMenuOpen(false);
+
+    if (typeof index === "number") {
+      setActiveNavIndex(index);
+    }
+  };
+
   return (
     <header
       className={`fixed left-0 right-0 top-0 z-50 px-3 transition-all duration-500 sm:px-5 ${
@@ -27,10 +62,11 @@ export function SiteHeader() {
       }`}
     >
       <div
+        ref={headerBarRef}
         className={`relative mx-auto flex w-full max-w-7xl items-center justify-between overflow-hidden rounded-[1.75rem] border px-4 transition-all duration-500 sm:px-5 lg:px-6 ${
           isScrolled
-            ? "h-[4.15rem] border-white/80 bg-white/78 shadow-[0_22px_70px_rgba(31,41,55,0.16),inset_0_0_0_1px_rgba(243,156,18,0.08)] backdrop-blur-2xl"
-            : "h-[4.85rem] border-white/60 bg-white/34 shadow-[0_18px_60px_rgba(31,41,55,0.1),inset_0_0_0_1px_rgba(243,156,18,0.07)] backdrop-blur-xl"
+            ? "h-[4.15rem] border-white/82 bg-white/76 shadow-[0_24px_80px_rgba(31,41,55,0.17),0_0_50px_rgba(11,107,46,0.08),inset_0_0_0_1px_rgba(243,156,18,0.08)] backdrop-blur-2xl"
+            : "h-[4.85rem] border-white/64 bg-white/36 shadow-[0_20px_70px_rgba(31,41,55,0.11),0_0_44px_rgba(11,107,46,0.08),inset_0_0_0_1px_rgba(243,156,18,0.07)] backdrop-blur-2xl"
         }`}
       >
         <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/90 to-transparent" />
@@ -42,7 +78,7 @@ export function SiteHeader() {
           className="group relative flex min-w-0 items-center gap-3"
           href="#inicio"
           aria-label="Ir al inicio"
-          onClick={() => setIsMenuOpen(false)}
+          onClick={(event) => handleAnchorNavigation(event, "#inicio", 0)}
         >
           <span
             className={`grid shrink-0 place-items-center overflow-hidden rounded-2xl border border-white/75 bg-white shadow-[0_14px_40px_rgba(11,107,46,0.2)] transition duration-500 group-hover:-translate-y-0.5 group-hover:shadow-[0_20px_52px_rgba(243,156,18,0.25)] ${
@@ -95,24 +131,15 @@ export function SiteHeader() {
                 }`}
                 href={item.href}
                 key={item.href}
-                onClick={() => setActiveNavIndex(index)}
+                onClick={(event) =>
+                  handleAnchorNavigation(event, item.href, index)
+                }
                 onMouseEnter={() => setHoverNavIndex(index)}
               >
                 {item.label}
               </Link>
             ))}
         </nav>
-
-        <div className="relative hidden items-center gap-3 lg:flex">
-          <Link
-            className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-[#0B6B2E] px-5 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(11,107,46,0.32),0_0_0_1px_rgba(255,255,255,0.35)_inset] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_24px_56px_rgba(11,107,46,0.34),0_12px_40px_rgba(243,156,18,0.22)]"
-            href={brand.quoteHref}
-          >
-            <span className="absolute inset-0 bg-gradient-to-r from-[#0B6B2E] via-[#11883D] to-[#F39C12] opacity-0 transition duration-500 group-hover:opacity-100" />
-            <span className="absolute -left-8 top-0 h-full w-8 skew-x-[-18deg] bg-white/26 opacity-0 blur-sm transition duration-700 group-hover:left-[115%] group-hover:opacity-100" />
-            <span className="relative">Solicitar Cotización</span>
-          </Link>
-        </div>
 
         <button
           className="relative inline-flex size-11 items-center justify-center rounded-full border border-white/70 bg-white/62 text-[#0B6B2E] shadow-[0_12px_30px_rgba(31,41,55,0.1)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white lg:hidden"
@@ -142,29 +169,56 @@ export function SiteHeader() {
       </div>
 
       <div
-        className={`grid transition-all duration-300 lg:hidden ${
-          isMenuOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        className={`grid transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden ${
+          isMenuOpen
+            ? "grid-rows-[1fr] opacity-100"
+            : "grid-rows-[0fr] opacity-0"
         }`}
       >
-        <div className="overflow-hidden">
-          <nav className="mx-2 mb-4 mt-2 rounded-[1.75rem] border border-white/70 bg-white/88 p-3 shadow-[0_22px_60px_rgba(31,41,55,0.16)] backdrop-blur-2xl sm:mx-3">
-            {navigationItems.map((item) => (
+        <div className="overflow-hidden px-2">
+          <nav
+            className={`relative mx-auto mb-4 mt-2 max-w-md overflow-hidden rounded-[1.65rem] border border-white/[0.13] bg-[#06120D]/72 p-2.5 font-heading shadow-[0_26px_80px_rgba(0,0,0,0.34),0_0_46px_rgba(30,143,71,0.12),inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-[28px] transition duration-500 sm:mx-1 ${
+              isMenuOpen
+                ? "animate-mobileMenuIn"
+                : "translate-y-[-8px] scale-[0.98] blur-sm"
+            }`}
+            aria-label="Navegación móvil"
+          >
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgba(212,175,55,0.13),transparent_38%),radial-gradient(circle_at_92%_18%,rgba(30,143,71,0.18),transparent_34%),linear-gradient(145deg,rgba(255,255,255,0.065),rgba(255,255,255,0.018))]" />
+            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#F8DDA0]/58 to-transparent" />
+            <div className="pointer-events-none absolute bottom-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-[#1E8F47]/44 to-transparent" />
+            <div className="pointer-events-none absolute -left-10 top-6 size-28 rounded-full bg-[#1E8F47]/16 blur-2xl" />
+            <div className="pointer-events-none absolute -right-10 bottom-2 size-24 rounded-full bg-[#D4AF37]/11 blur-2xl" />
+
+            <div className="relative z-10 grid gap-1">
+            {navigationItems.map((item, index) => (
               <Link
-                className="block rounded-2xl px-4 py-3 text-sm font-semibold text-[#1F2937]/76 transition hover:bg-[#F39C12]/10 hover:text-[#0B6B2E]"
+                className={`group relative overflow-hidden rounded-[1.15rem] border px-4 py-3.5 text-sm font-semibold tracking-[0.01em] transition duration-500 hover:translate-x-1 hover:border-white/[0.16] hover:bg-white/[0.075] hover:text-white hover:shadow-[0_14px_34px_rgba(0,0,0,0.18),0_0_26px_rgba(212,175,55,0.08)] ${
+                  index === activeNavIndex
+                    ? "border-white/[0.14] bg-white/[0.075] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                    : "border-transparent text-white/72"
+                }`}
                 href={item.href}
                 key={item.href}
-                onClick={() => setIsMenuOpen(false)}
+                onClick={(event) =>
+                  handleAnchorNavigation(event, item.href, index)
+                }
               >
-                {item.label}
+                <span className="absolute inset-y-2 left-0 w-px bg-gradient-to-b from-transparent via-[#D4AF37]/0 to-transparent transition duration-500 group-hover:via-[#D4AF37]/65" />
+                <span className="absolute inset-0 bg-gradient-to-r from-white/[0.06] via-transparent to-[#D4AF37]/[0.045] opacity-0 transition duration-500 group-hover:opacity-100" />
+                <span className="relative flex items-center justify-between">
+                  <span>{item.label}</span>
+                  <span
+                    className={`size-1.5 rounded-full transition duration-500 ${
+                      index === activeNavIndex
+                        ? "bg-[#D4AF37] shadow-[0_0_18px_rgba(212,175,55,0.45)]"
+                        : "bg-white/18 group-hover:bg-[#A7E164] group-hover:shadow-[0_0_16px_rgba(167,225,100,0.32)]"
+                    }`}
+                  />
+                </span>
               </Link>
             ))}
-            <Link
-              className="mt-2 flex h-12 items-center justify-center rounded-2xl bg-gradient-to-r from-[#0B6B2E] to-[#F39C12] px-5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(243,156,18,0.2)]"
-              href={brand.quoteHref}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Solicitar Cotización
-            </Link>
+            </div>
           </nav>
         </div>
       </div>
