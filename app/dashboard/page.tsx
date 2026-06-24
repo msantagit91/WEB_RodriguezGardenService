@@ -1,9 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "../lib/supabaseClient";
 
 export default function DashboardPage() {
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const router = useRouter();
+  
+ async function cerrarSesion() {
+  await supabase.auth.signOut();
+  router.push("/");
+}
 
   const acciones = [
     { titulo: "Nuevo cliente", icono: "＋" },
@@ -264,9 +272,12 @@ export default function DashboardPage() {
           </nav>
 
           <div className="border-t border-white/10 px-6 py-5">
-            <button className="text-sm font-semibold text-white/45 transition duration-300 hover:text-[#f0c779]">
-              Cerrar sesión
-            </button>
+            <button
+  onClick={cerrarSesion}
+  className="text-sm font-semibold text-white/45 transition duration-300 hover:text-[#f0c779]"
+>
+  Cerrar sesión
+</button>
           </div>
         </div>
       </aside>
