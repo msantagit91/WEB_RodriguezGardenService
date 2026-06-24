@@ -84,12 +84,28 @@ export function FooterSection() {
         </div>
 
         <div className="mx-auto mt-6 max-w-xl border-t border-white/[0.08] pt-5 text-center text-xs font-medium leading-6 text-white/42">
-          <p>© 2026 Rodriguez Garden Service. Todos los derechos reservados.</p>
-          <p className="mt-1 text-white/34">
-            Transformando jardines, creando experiencias.
-          </p>
-        </div>
+  <p>© 2026 Rodriguez Garden Service. Todos los derechos reservados.</p>
+
+  <p className="mt-1 text-white/34">
+    Transformando jardines, creando experiencias.
+  </p>
+</div>
+
+<div className="mt-6 text-center">
+  <Link
+    href="/admin"
+    className="group inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.28em] text-white/20 transition-all duration-500 hover:text-[#D4AF37]"
+  >
+    Operations Access
+
+    <span className="translate-x-0 opacity-0 transition-all duration-500 group-hover:translate-x-1 group-hover:opacity-100">
+      →
+    </span>
+  </Link>
+</div>
+        
       </div>
+      
     </footer>
   );
 }

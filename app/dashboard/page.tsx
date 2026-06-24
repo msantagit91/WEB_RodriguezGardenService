@@ -50,10 +50,23 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-[#030805] text-white">
-      <section className="relative mx-auto min-h-screen max-w-md overflow-hidden bg-[#07130c]">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_5%,rgba(214,168,91,0.16),transparent_32%),radial-gradient(circle_at_85%_22%,rgba(71,133,83,0.18),transparent_35%),radial-gradient(circle_at_50%_100%,rgba(214,168,91,0.08),transparent_42%),linear-gradient(180deg,#07130c_0%,#0d2014_48%,#050b07_100%)]" />
-        <div className="pointer-events-none absolute left-0 top-0 h-full w-full bg-[linear-gradient(120deg,rgba(255,255,255,0.045),transparent_35%,rgba(255,255,255,0.025)_65%,transparent)]" />
+      <section className="relative mx-auto min-h-screen max-w-md overflow-hidden bg-[#010403]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(214,168,91,0.12),transparent_32%),radial-gradient(circle_at_85%_22%,rgba(54,111,68,0.14),transparent_36%),linear-gradient(180deg,#010403_0%,#06110b_45%,#020604_100%)]" />
 
+<div className="pointer-events-none absolute inset-0 opacity-35">
+  <div className="absolute left-[12%] top-[18%] h-3 w-3 animate-pulse rounded-full bg-[#d6a85b]/70 shadow-[0_0_28px_rgba(214,168,91,0.55)]" />
+  <div className="absolute left-[42%] top-[12%] h-2 w-2 animate-pulse rounded-full bg-emerald-300/50 shadow-[0_0_24px_rgba(110,231,183,0.35)]" />
+  <div className="absolute right-[18%] top-[30%] h-4 w-4 animate-pulse rounded-full bg-[#d6a85b]/45 shadow-[0_0_32px_rgba(214,168,91,0.4)]" />
+  <div className="absolute left-[22%] bottom-[28%] h-4 w-4 animate-pulse rounded-full bg-emerald-300/40 shadow-[0_0_30px_rgba(110,231,183,0.3)]" />
+  <div className="absolute right-[22%] bottom-[18%] h-2.5 w-2.5 animate-pulse rounded-full bg-[#d6a85b]/55 shadow-[0_0_26px_rgba(214,168,91,0.45)]" />
+
+  <div className="absolute left-[14%] top-[20%] h-px w-[140px] rotate-[18deg] bg-gradient-to-r from-[#d6a85b]/35 to-transparent" />
+  <div className="absolute right-[22%] top-[33%] h-px w-[120px] -rotate-[28deg] bg-gradient-to-r from-emerald-300/25 to-transparent" />
+  <div className="absolute bottom-[24%] left-[26%] h-px w-[160px] rotate-[-14deg] bg-gradient-to-r from-[#d6a85b]/25 to-transparent" />
+</div>
+
+<div className="pointer-events-none absolute -left-28 top-16 h-80 w-80 animate-pulse rounded-full bg-[#d6a85b]/8 blur-3xl" />
+<div className="pointer-events-none absolute -right-32 bottom-10 h-96 w-96 animate-pulse rounded-full bg-emerald-400/8 blur-3xl" />
         <header className="relative px-5 pb-4 pt-6">
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.055] p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl">
             <div className="flex items-center justify-between gap-4">
@@ -216,7 +229,7 @@ export default function DashboardPage() {
       />
 
       <aside
-        className={`fixed left-0 top-0 z-50 h-screen w-[82%] max-w-[340px] border-r border-[#d6a85b]/15 bg-[#07140d]/80 shadow-[0_0_70px_rgba(0,0,0,0.65)] backdrop-blur-3xl transition-transform duration-500 ease-out ${
+        className={`fixed left-0 top-0 z-50 h-screen w-[82%] max-w-[340px] border-r border-[#d6a85b]/15 bg-[#020604]/85 shadow-[0_0_70px_rgba(0,0,0,0.65)] backdrop-blur-3xl transition-transform duration-500 ease-out ${
           menuAbierto ? "translate-x-0" : "-translate-x-full"
         }`}
       >
