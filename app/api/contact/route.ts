@@ -16,7 +16,7 @@ type NormalizedContact = {
   fecha: string;
 };
 
-const contactToEmail = process.env.CONTACT_TO_EMAIL ?? "moisake1726@gmail.com";
+const contactToEmail = process.env.CONTACT_TO_EMAIL ?? "santamariamoises91@gmail.com";
 const contactFromEmail =
   process.env.CONTACT_FROM_EMAIL ??
   "Rodriguez Garden Service <onboarding@resend.dev>";
