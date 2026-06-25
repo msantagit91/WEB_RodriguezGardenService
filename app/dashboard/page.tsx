@@ -3,14 +3,27 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../lib/supabaseClient";
+import ClienteModal from "@/components/admin/ClienteModal";
+import CalendarioModal from "@/components/admin/CalendarioModal";
 
 export default function DashboardPage() {
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const [modalClienteAbierto, setModalClienteAbierto] = useState(false);
+  const [modalCalendarioAbierto, setModalCalendarioAbierto] = useState(false);
   const router = useRouter();
   
  async function cerrarSesion() {
   await supabase.auth.signOut();
   router.push("/");
+}
+function abrirModalCliente() {
+  setModalClienteAbierto(true);
+  setMenuAbierto(false);
+}
+
+function abrirModalCalendario() {
+  setModalCalendarioAbierto(true);
+  setMenuAbierto(false);
 }
 
   const acciones = [
@@ -112,9 +125,14 @@ export default function DashboardPage() {
           <div className="mt-6 grid grid-cols-2 gap-3">
             {acciones.map((accion) => (
               <button
-                key={accion.titulo}
-                className="group relative overflow-hidden rounded-[1.7rem] border border-white/10 bg-white/[0.055] p-5 text-left shadow-xl shadow-black/20 backdrop-blur-2xl transition duration-500 hover:-translate-y-1 hover:border-[#d6a85b]/35 hover:bg-white/[0.08] hover:shadow-[0_0_35px_rgba(214,168,91,0.12)]"
-              >
+  key={accion.titulo}
+  onClick={() => {
+    if (accion.titulo === "Nuevo cliente") {
+      abrirModalCliente();
+    }
+  }}
+  className="group relative overflow-hidden rounded-[1.7rem] border border-white/10 bg-white/[0.055] p-5 text-left shadow-xl shadow-black/20 backdrop-blur-2xl transition duration-500 hover:-translate-y-1 hover:border-[#d6a85b]/35 hover:bg-white/[0.08] hover:shadow-[0_0_35px_rgba(214,168,91,0.12)]"
+>
                 <div className="pointer-events-none absolute -inset-10 bg-[radial-gradient(circle_at_50%_0%,rgba(214,168,91,0.22),transparent_45%)] opacity-0 transition duration-500 group-hover:opacity-100" />
 
                 <div className="relative grid h-12 w-12 place-items-center rounded-2xl border border-[#d6a85b]/20 bg-[#d6a85b]/10 text-2xl text-[#f0c779] shadow-lg shadow-[#d6a85b]/10 transition duration-500 group-hover:scale-105 group-hover:border-[#f0c779]/35">
@@ -259,7 +277,19 @@ export default function DashboardPage() {
               {opcionesMenu.map((item) => (
                 <button
                   key={item}
-                  onClick={() => setMenuAbierto(false)}
+                  onClick={() => {
+  if (item === "Clientes") {
+    abrirModalCliente();
+    return;
+  }
+
+  if (item === "Calendario") {
+  abrirModalCalendario();
+  return;
+}
+
+  setMenuAbierto(false);
+}}
                   className="group flex w-full items-center justify-between rounded-2xl border border-transparent px-4 py-3.5 text-left text-sm font-medium text-white/65 transition duration-300 hover:border-[#d6a85b]/20 hover:bg-white/[0.055] hover:text-[#f0c779]"
                 >
                   <span>{item}</span>
@@ -278,9 +308,19 @@ export default function DashboardPage() {
 >
   Cerrar sesión
 </button>
+
           </div>
         </div>
       </aside>
+      <ClienteModal
+  abierto={modalClienteAbierto}
+  onCerrar={() => setModalClienteAbierto(false)}
+/>
+
+<CalendarioModal
+  abierto={modalCalendarioAbierto}
+  onCerrar={() => setModalCalendarioAbierto(false)}
+/>
     </main>
   );
 }
